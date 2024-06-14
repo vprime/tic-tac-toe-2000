@@ -11,3 +11,17 @@
 8. Most importantly, have fun! 
 9. Unity URP >= 2022
 10. Delivered as a whole
+
+
+
+
+## Design
+
+## Development
+
+### Gameplay Systems
+* Setup Game Board
+* Game Turn Loop
+* Human Player Input
+* AI Player Input
+* End Game Check
