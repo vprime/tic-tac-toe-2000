@@ -20,14 +20,14 @@ namespace App.Systems
             }
         }
 
-        IEnumerator SequenceRoutine()
+        private IEnumerator SequenceRoutine()
         {
             // Load the game map, play the initialization animation, await animation completion.
             yield return null;
             RoutineComplete();
         }
 
-        void RoutineComplete()
+        private void RoutineComplete()
         {
             appControl.CurrentAppState = AppStates.Game;
         }

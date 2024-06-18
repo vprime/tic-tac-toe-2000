@@ -1,34 +1,70 @@
-using System.Collections;
 using UnityEngine;
 using App.Components;
+using Game;
+using Game.Components;
 
 namespace App.Systems
 {
     public class MainMenuControl : MonoBehaviour
     {
         [SerializeField] private AppControl appControl;
+        [SerializeField] private AppUI appUi;
+        [SerializeField] private GameControl gameControl;
+        [SerializeField] private Board defaultBoard;
+        
         private void Awake()
         {
             appControl.OnAppStateChange.AddListener(HandleAppStateChange);
         }
 
+        private void Start()
+        {
+            appUi.OnStartPlayX += HandleStartPlayerX;
+            appUi.OnStartPlayO += HandleStartPlayerO;
+            appUi.OnStartPlayTwoPlayer += HandleStartTwoPlayer;
+        }
+
         private void HandleAppStateChange(AppStates prev, AppStates next)
         {
-            if (next == AppStates.MainMenu)
+            appUi.gameObject.SetActive(next == AppStates.MainMenu);
+        }
+
+        private void HandleStartPlayerX()
+        {
+            var setup = new GameSetup
             {
-                StartCoroutine(SequenceRoutine());
-            }
+                Board = defaultBoard
+            };
+            setup.Players.Add(PlayerSymbol.X, new Player(PlayerSymbol.X, PlayerType.Human));
+            setup.Players.Add(PlayerSymbol.O, new Player(PlayerSymbol.O, PlayerType.AI));
+            gameControl.GameSetup = setup;
+            
+            appControl.CurrentAppState = AppStates.GameCountdown;
         }
 
-        IEnumerator SequenceRoutine()
+        private void HandleStartPlayerO()
         {
-            // Load main menu and await user input
-            yield return null;
-            RoutineComplete();
+            var setup = new GameSetup
+            {
+                Board = defaultBoard
+            };
+            setup.Players.Add(PlayerSymbol.X, new Player(PlayerSymbol.X, PlayerType.AI));
+            setup.Players.Add(PlayerSymbol.O, new Player(PlayerSymbol.O, PlayerType.Human));
+            gameControl.GameSetup = setup;
+            
+            appControl.CurrentAppState = AppStates.GameCountdown;
         }
 
-        void RoutineComplete()
+        private void HandleStartTwoPlayer()
         {
+            var setup = new GameSetup
+            {
+                Board = defaultBoard
+            };
+            setup.Players.Add(PlayerSymbol.X, new Player(PlayerSymbol.X, PlayerType.Human));
+            setup.Players.Add(PlayerSymbol.O, new Player(PlayerSymbol.O, PlayerType.Human));
+            gameControl.GameSetup = setup;
+            
             appControl.CurrentAppState = AppStates.GameCountdown;
         }
     }

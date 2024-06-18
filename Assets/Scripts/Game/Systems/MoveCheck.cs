@@ -1,36 +1,34 @@
 using System.Collections.Generic;
-using System.Linq;
 using Game.Components;
+using UnityEngine;
 
 namespace Game.Systems
 {
-    public class MoveCheck
+    public static class MoveCheck
     {
-        public void CheckEndGame(ref GameState state)
+        public static bool CheckEndGame(GameState state)
         {
-            if (CheckGameover(state.CurrentMap, state.Round))
+            if (CheckWin(state.CurrentMap, out var winner, out _))
             {
-                // Game over!
-                if (CheckWin(state.CurrentMap, out int winner, out List<MapTile> tiles))
-                {
-                    
-                }
+                Debug.Log($"Winner is player {(PlayerSymbol)winner}!");
+                return true;
             }
+
+            if (!CheckGameover(state.CurrentMap, state.Round)) return false;
+            // Game over!
+            Debug.Log("It was a draw!");
+            return true;
+
         }
 
-        public static bool CheckLegal(Move move, Map map)
+        private static bool CheckGameover(Map map, int round)
         {
-            return map.ValidateMove(move.Position.X, move.Position.Y);
-        }
-
-        public static bool CheckGameover(Map map, int round)
-        {
-            return map.Area < round;
+            return map.Area <= round;
         }
 
         public static bool CheckWin(Map map, out int winningPlayer, out List<MapTile> winningTiles)
         {
-            List<List<MapTile>> pathsToTest = new List<List<MapTile>>();
+            var pathsToTest = new List<List<MapTile>>();
             
             // Check each row for win
             for (var i = 0; i < map.Rows; i++)
@@ -51,32 +49,31 @@ namespace Game.Systems
             pathsToTest.Add(map.Diagonal(-1));
 
             // Loop through the list
-            foreach(List<MapTile> path in pathsToTest)
+            foreach(var path in pathsToTest)
             {
                 // Test for a winner
-                int result = WinnerInList(path, map.DefaultData);
-                if (result != map.DefaultData)
-                {
-                    // Return the winner's ID and the winning tiles
-                    winningPlayer = result;
-                    winningTiles = path;
-                    return true;
-                }
+                var result = WinnerInList(path, map.DefaultData);
+                if (result == map.DefaultData) continue;
+                // Return the winner's ID and the winning tiles
+                winningPlayer = result;
+                winningTiles = path;
+                return true;
             }
             // No wins, return null tiles and default number
             winningTiles = null;
             winningPlayer = map.DefaultData;
             return false;
         }
-        
+
         /// <summary>
         /// Check the list to see if it's a winning row.
         /// </summary>
         /// <param name="positions">List of player indexes from a row</param>
+        /// <param name="empty">Empty value</param>
         /// <returns>The winner's index, or default value</returns>
-        static int WinnerInList(List<MapTile> positions, int empty)
+        private static int WinnerInList(List<MapTile> positions, int empty)
         {
-            int first = positions[0].Value;
+            var first = positions[0].Value;
             if (first == empty)
                 return empty;
             

@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Assertions;
 using UnityEngine.UIElements;
 
 namespace App.Systems
@@ -23,20 +24,28 @@ namespace App.Systems
         
         
         // Start is called before the first frame update
-        void OnEnable()
+        private void OnEnable()
         {
+            Debug.Log("AppUI Enabled");
             _menuRoot = uiDocument.rootVisualElement.Q("root");
             _players = uiDocument.rootVisualElement.Q("PlayerModeSelect");
-
-            _menuRoot.visible = true;
-            _players.visible = true;
-            _playerSymbol.visible = false;
-            
             _playerSymbol = uiDocument.rootVisualElement.Q("SinglePlayerSymbolSelect");
+            
             _singlePlayerButton = uiDocument.rootVisualElement.Q("SinglePlayerButton") as Button;
             _twoPlayerButton = uiDocument.rootVisualElement.Q("TwoPlayerButton") as Button;
             _playXButton = uiDocument.rootVisualElement.Q("PlayX") as Button;
             _playOButton = uiDocument.rootVisualElement.Q("PlayO") as Button;
+
+            Assert.IsNotNull(_menuRoot);
+            Assert.IsNotNull(_players);
+            Assert.IsNotNull(_playerSymbol);
+            Assert.IsNotNull(_singlePlayerButton);
+            Assert.IsNotNull(_twoPlayerButton);
+            Assert.IsNotNull(_playXButton);
+            Assert.IsNotNull(_playOButton);
+            
+            _players.style.display = DisplayStyle.Flex;
+            _playerSymbol.style.display = DisplayStyle.None;
 
             _singlePlayerButton?.RegisterCallback<ClickEvent>(HandleSinglePlayerMode);
             _twoPlayerButton?.RegisterCallback<ClickEvent>(HandleTwoPlayerMode);
@@ -52,26 +61,26 @@ namespace App.Systems
             _playOButton.UnregisterCallback<ClickEvent>(HandlePlayO);
         }
 
-        void HandleSinglePlayerMode(ClickEvent evt)
+        private void HandleSinglePlayerMode(ClickEvent evt)
         {
-            _players.visible = false;
-            _playerSymbol.visible = true;
-            
+            Debug.Log("Single player mode selected");
+            _players.style.display = DisplayStyle.None;
+            _playerSymbol.style.display = DisplayStyle.Flex;
         }
 
-        void HandleTwoPlayerMode(ClickEvent evt)
+        private void HandleTwoPlayerMode(ClickEvent evt)
         {
             OnStartPlayTwoPlayer?.Invoke();
             gameObject.SetActive(false);
         }
 
-        void HandlePlayX(ClickEvent evt)
+        private void HandlePlayX(ClickEvent evt)
         {
             OnStartPlayX?.Invoke();
             gameObject.SetActive(false);
         }
 
-        void HandlePlayO(ClickEvent evt)
+        private void HandlePlayO(ClickEvent evt)
         {
             OnStartPlayO?.Invoke();
             gameObject.SetActive(false);

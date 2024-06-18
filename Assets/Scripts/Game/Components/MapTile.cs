@@ -4,7 +4,7 @@ namespace Game.Components
     public struct MapTile
     {
         public MapPosition Position;
-        public int Value;
+        public readonly int Value;
 
         public MapTile(MapPosition position, int value)
         {

@@ -1,13 +1,11 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using App.Components;
 
 namespace App.Systems
 {
     /// <summary>
-    /// Asset loader fetches assetsbundles and loads them into memory.
+    /// Asset loader fetches assets bundles and loads them into memory.
     /// For this example, AssetLoader should not be needed. 
     /// </summary>
     public class AssetLoader : MonoBehaviour
@@ -26,13 +24,13 @@ namespace App.Systems
             }
         }
 
-        IEnumerator LoadAssets()
+        private IEnumerator LoadAssets()
         {
             yield return null;
             LoadingComplete();
         }
 
-        void LoadingComplete()
+        private void LoadingComplete()
         {
             appControl.CurrentAppState = AppStates.OpeningSequence;
         }

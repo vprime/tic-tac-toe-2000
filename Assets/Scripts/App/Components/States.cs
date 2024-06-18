@@ -15,6 +15,6 @@ namespace App.Components
         GameCountdown,
         Game,
         CelebrateWinner,
-        GameResults,
+        GameResults
     }
 }

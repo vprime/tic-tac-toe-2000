@@ -20,14 +20,14 @@ namespace App.Systems
             }
         }
 
-        IEnumerator SequenceRoutine()
+        private IEnumerator SequenceRoutine()
         {
             // Trigger opening sequence animation, and await completion or user input.
             yield return null;
             RoutineComplete();
         }
 
-        void RoutineComplete()
+        private void RoutineComplete()
         {
             appControl.CurrentAppState = AppStates.MainMenu;
         }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using App.Components;
@@ -13,12 +14,16 @@ namespace Game
 
         private GameState _gameState;
 
-        private GameSetup _gameSetup;
+        public GameSetup GameSetup { get; set; }
 
-        public GameSetup GameSetup
+        public GameState GameState => _gameState;
+
+        public event Action<MapTile> OnTileUpdate;
+
+        public bool PlayerInput(int col, int row, out Player currentPlayer)
         {
-            get => _gameSetup;
-            set => _gameSetup = value;
+            currentPlayer = _gameState.Players[_gameState.CurrentPlayer];
+            return HumanPlayer.RequestMove(ref _gameState, col, row);
         }
         
         
@@ -35,20 +40,23 @@ namespace Game
             }
         }
 
-        IEnumerator SequenceRoutine()
+        private IEnumerator SequenceRoutine()
         {
-            _gameState = new GameState(_gameSetup.Board, _gameSetup.Players);
-            while (!MoveCheck.CheckGameover(_gameState.CurrentMap, _gameState.Round))
+            Debug.Log("Game sequence begun");
+            _gameState = new GameState(GameSetup.Board, GameSetup.Players);
+            _gameState.CurrentMap.OnTileUpdate += OnTileUpdate;
+            while (!MoveCheck.CheckEndGame(_gameState))
             {
                 GameTurnLoop.UpdateTurnState(ref _gameState);
                 yield return null;
             }
+            Debug.Log("Game sequence completed");
             // Run the game, await a winner
             yield return null;
             RoutineComplete();
         }
 
-        void RoutineComplete()
+        private void RoutineComplete()
         {
             appControl.CurrentAppState = AppStates.CelebrateWinner;
         }

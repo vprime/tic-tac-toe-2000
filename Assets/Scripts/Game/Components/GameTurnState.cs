@@ -1,5 +1,3 @@
-using UnityEngine;
-
 namespace Game.Components
 {
     public enum GameTurnState
@@ -7,6 +5,6 @@ namespace Game.Components
         Init,
         SelectPlayer,
         PlayerInput,
-        CheckMove,
+        CheckMove
     }
 }

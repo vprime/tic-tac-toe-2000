@@ -1,24 +1,23 @@
 using System;
-using UnityEngine.Serialization;
 
 namespace Game.Components
 {
     [Serializable]
     public struct Player
     {
-        public int index;
+        public PlayerSymbol symbol;
 
         public PlayerType type;
 
-        public Player(int index, PlayerType type)
+        public Player(PlayerSymbol symbol, PlayerType type)
         {
-            this.index = index;
+            this.symbol = symbol;
             this.type = type;
         }
 
         public override string ToString()
         {
-            return $"{index}";
+            return $"player {type} {symbol}";
         }
     }
 }

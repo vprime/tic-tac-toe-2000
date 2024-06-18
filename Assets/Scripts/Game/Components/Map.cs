@@ -1,28 +1,29 @@
+using System;
 using System.Collections.Generic;
 
 namespace Game.Components
 {
     public class Map : List<List<int>>
     {
-        private readonly int _rows;
-        private readonly int _columns;
-        private readonly int _defaultData;
-        public int Rows => _rows;
-        public int Columns => _columns;
-        public int DefaultData => _defaultData;
-        
-        public int Area => _rows * _columns;
+        public int Rows { get; }
+
+        public int Columns { get; }
+
+        public int DefaultData { get; }
+
+        public int Area => Rows * Columns;
+        public event Action<MapTile> OnTileUpdate;
 
         public Map(int rows, int columns, int defaultData)
         {
-            _rows = rows;
-            _columns = columns;
-            _defaultData = defaultData;
+            Rows = rows;
+            Columns = columns;
+            DefaultData = defaultData;
             
             // Generate Columns
             for (var iColumn = 0; iColumn < columns; iColumn++)
             {
-                List<int> column = new List<int>();
+                var column = new List<int>();
                 // Generate Rows
                 for (var iRow = 0; iRow < rows; iRow++)
                 {
@@ -41,7 +42,7 @@ namespace Game.Components
                 return false;
 
             // Empty check
-            if (this[x][y] == _defaultData)
+            if (this[x][y] == DefaultData)
                 return true;
             return false;
         }
@@ -50,6 +51,7 @@ namespace Game.Components
         public void Set(int x, int y, int value)
         {
             this[x][y] = value;
+            OnTileUpdate?.Invoke(new MapTile(x, y, value));
         }
         
         /// <summary>
@@ -59,7 +61,7 @@ namespace Game.Components
         /// <returns>Map contents for given row</returns>
         public List<MapTile> Row(int index)
         {
-            List<MapTile> response = new List<MapTile>();
+            var response = new List<MapTile>();
             for(var iCol=0; iCol < Count; iCol++)
             {
                 response.Add(new MapTile(iCol, index, this[iCol][index]));
@@ -74,7 +76,7 @@ namespace Game.Components
         /// <returns>Map contents for given column</returns>
         public List<MapTile> Column(int index)
         {
-            List<MapTile> response = new List<MapTile>();
+            var response = new List<MapTile>();
             for (var iRow = 0; iRow < this[index].Count; iRow++)
             {
                 response.Add(new MapTile(index, iRow, this[index][iRow]));
@@ -89,8 +91,8 @@ namespace Game.Components
         /// <returns>Map contents for the given direction</returns>
         public List<MapTile> Diagonal(int direction)
         {
-            List<MapTile> response = new List<MapTile>();
-            int rowIndex = 0;
+            var response = new List<MapTile>();
+            var rowIndex = 0;
             if (direction < 0)
                 rowIndex = this[0].Count - 1;
             for (var colIndex = 0; colIndex < Count; colIndex++)
@@ -108,12 +110,12 @@ namespace Game.Components
         public List<MapTile> OpenPositions()
         {
             var response = new List<MapTile>();
-            for (int iCol = 0; iCol < _columns; iCol++)
+            for (var iCol = 0; iCol < Columns; iCol++)
             {
-                for (int iRow = 0; iRow < _rows; iRow++)
+                for (var iRow = 0; iRow < Rows; iRow++)
                 {
-                    if (this[iCol][iRow] != _defaultData)
-                        response.Add(new MapTile(iCol, iRow, _defaultData));
+                    if (this[iCol][iRow] == DefaultData)
+                        response.Add(new MapTile(iCol, iRow, DefaultData));
                 }
             }
             return response;

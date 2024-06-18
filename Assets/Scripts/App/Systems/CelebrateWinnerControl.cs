@@ -20,14 +20,14 @@ namespace App.Systems
             }
         }
 
-        IEnumerator SequenceRoutine()
+        private IEnumerator SequenceRoutine()
         {
             // Trigger an animation according to the winning player, await the animation completion or user input.
             yield return null;
             RoutineComplete();
         }
 
-        void RoutineComplete()
+        private void RoutineComplete()
         {
             appControl.CurrentAppState = AppStates.GameResults;
         }

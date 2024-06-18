@@ -23,8 +23,8 @@ namespace App.Systems
             }
         }
 
-        public AppStateChangeEvent BeforeAppStateChange = new AppStateChangeEvent();
-        public AppStateChangeEvent OnAppStateChange = new AppStateChangeEvent();
+        public readonly AppStateChangeEvent BeforeAppStateChange = new();
+        public readonly AppStateChangeEvent OnAppStateChange = new();
 
         private IEnumerator Start()
         {

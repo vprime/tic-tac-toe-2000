@@ -4,7 +4,7 @@ namespace Game.Components
 {
     public class GameSetup
     {
-        public List<Player> Players = new List<Player>();
+        public readonly Dictionary<PlayerSymbol, Player> Players = new();
         public Board Board;
     }
 }

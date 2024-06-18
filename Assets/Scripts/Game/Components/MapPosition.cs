@@ -3,8 +3,8 @@ namespace Game.Components
 {
     public struct MapPosition
     {
-        public int X;
-        public int Y;
+        public readonly int X;
+        public readonly int Y;
 
         public MapPosition(int x, int y)
         {

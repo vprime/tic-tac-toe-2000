@@ -1,11 +1,9 @@
 using System;
-using System.Collections;
 using Game.Components;
-using UnityEngine;
 
 namespace Game.Systems
 {
-    public class GameTurnLoop
+    public static class GameTurnLoop
     {
         public static void UpdateTurnState(ref GameState state)
         {
@@ -15,30 +13,34 @@ namespace Game.Systems
                     state.TurnState = GameTurnState.SelectPlayer;
                     break;
                 case GameTurnState.SelectPlayer:
-                    state.CurrentPlayer = SelectPlayer(ref state).index;
+                    state.CurrentPlayer = SelectPlayer(ref state).symbol;
                     state.TurnState = GameTurnState.PlayerInput;
-                    break;
-                case GameTurnState.PlayerInput:
                     RequestPlayerInput(ref state);
                     break;
+                case GameTurnState.PlayerInput:
+                    break;
                 case GameTurnState.CheckMove:
+                    state.Round += 1;
+                    state.TurnState = GameTurnState.Init;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
         }
-        
 
-        static Player SelectPlayer(ref GameState state)
+        private static Player SelectPlayer(ref GameState state)
         {
-            return state.Players[state.Round % state.Players.Count];
+            // Check if the round is even or odd with a modulo 2. X always goes first so it's even.
+            var symbol = state.Round % 2 == 0 ? PlayerSymbol.X : PlayerSymbol.O;
+            return state.Players[symbol];
         }
 
-        static void RequestPlayerInput(ref GameState state)
+        private static void RequestPlayerInput(ref GameState state)
         {
             switch (state.Players[state.CurrentPlayer].type)
             {
                 case PlayerType.Human:
+                    // Await human input
                     break;
                 case PlayerType.AI:
                     AiPlayer.PickMove(ref state);
