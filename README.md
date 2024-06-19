@@ -1,4 +1,6 @@
 # Tic Tac Toe 2000
+## [Play WebGL](https://vprime.dev/tic-tac-toe-2000/)
+
 ## Introduction
 This is a sample application written within a week as a technical assessment for [Illumix](https://www.illumix.com/).
 The application is a simple game of [Tic-tac-toe](https://en.wikipedia.org/wiki/Tic-tac-toe).
