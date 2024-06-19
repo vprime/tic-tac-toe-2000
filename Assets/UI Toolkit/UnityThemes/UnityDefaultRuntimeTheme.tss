@@ -1,1 +1,26 @@
 @import url("unity-theme://default");
+
+
+.unity-button {
+    -unity-font: url("project://database/Assets/Fonts/hdad-segment14/Segment14.otf?fileID=12800000&amp;guid=76feef3dd8ddbb6a08c3b7b70fea8f4d&amp;type=3#Segment14"); 
+    -unity-font-definition: url("project://database/Assets/Fonts/hdad-segment14/Segment14%20SDF.asset?fileID=11400000&amp;guid=788946749714de188ba221dd8f300c93&amp;type=2#Segment14 SDF");
+    padding: 5px;
+    font-size: 40px;
+    color: #ee0000;
+    border-color: #eeeeee;
+    border-width: 10px;
+    background-color: #111111;
+}
+
+.button-frame {
+    padding: 5px;
+    background-color: #111111;
+}
+
+Label {
+    -unity-font: url("project://database/Assets/Fonts/hdad-segment14/Segment14.otf?fileID=12800000&amp;guid=76feef3dd8ddbb6a08c3b7b70fea8f4d&amp;type=3#Segment14");
+    -unity-font-definition: url("project://database/Assets/Fonts/hdad-segment14/Segment14%20SDF.asset?fileID=11400000&amp;guid=788946749714de188ba221dd8f300c93&amp;type=2#Segment14 SDF");
+    padding: 5px;
+    background-color: #111111;
+    color: #ee0000;
+}

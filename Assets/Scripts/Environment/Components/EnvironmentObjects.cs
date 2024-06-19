@@ -10,7 +10,5 @@ namespace Environment.Components
         public GamePiece gamePiece;
         public float columnHeight;
         public float rowWidth;
-        public float boardZOffset;
-
     }
 }

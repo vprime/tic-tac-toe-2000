@@ -16,6 +16,6 @@ MonoBehaviour:
     type: 3}
   gamePiece: {fileID: 6964044240836190716, guid: 5d0535d5d93d81d409260cb83f63967e,
     type: 3}
-  columnHeight: 1.2
-  rowWidth: 1.2
+  columnHeight: 0.025
+  rowWidth: 0.025
   boardZOffset: 0

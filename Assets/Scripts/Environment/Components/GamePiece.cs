@@ -1,19 +1,28 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using Environment.Systems;
 using Game.Components;
 using UnityEngine;
 
 namespace Environment.Components
 {
+    /// <summary>
+    /// Game Object behavior component for game pieces
+    /// </summary>
     public class GamePiece : MonoBehaviour
     {
         [SerializeField] private ClickableObject clickableObject;
-        [SerializeField] private PlayerSymbols playerSymbols;
+        [SerializeField] private DigitSegmentRenderer digitSegmentRenderer;
+
+        [SerializeField] private Material humanXColor;
+        [SerializeField] private Material humanOColor;
+        [SerializeField] private Material aiColor;
         
         private int _columnAddress;
         private int _rowAddress;
         private Action<int, int, GamePiece> _interactionCallback;
-        private GameObject _activePlayerSymbol;
+        private Player? _setPlayer;
 
         private void OnEnable()
         {
@@ -34,24 +43,73 @@ namespace Environment.Components
 
         public void SetPlayer(Player player)
         {
-            // Update the renderer to display the chosen player. 
-            RenderPlayerSymbol(playerSymbols.GetPlayerSymbol(player));
+            _setPlayer = player;
+            switch (player.symbol)
+            {
+                case PlayerSymbol.X:
+                    switch (player.type)
+                    {
+                        case PlayerType.Human:
+                            digitSegmentRenderer.SetLitMaterial(humanXColor);
+                            break;
+                        case PlayerType.AI:
+                            digitSegmentRenderer.SetLitMaterial(aiColor);
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+                    digitSegmentRenderer.SetCharacter('X');
+                    break;
+                case PlayerSymbol.O:
+                    switch (player.type)
+                    {
+                        case PlayerType.Human:
+                            digitSegmentRenderer.SetLitMaterial(humanOColor);
+                            break;
+                        case PlayerType.AI:
+                            digitSegmentRenderer.SetLitMaterial(aiColor);
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+                    digitSegmentRenderer.SetCharacter('O');
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        public void ClearPlayer()
+        {
+            digitSegmentRenderer.SetSegments(new List<DigitSegments>());
+            _setPlayer = null;
+            StartCoroutine(AnimateRejection());
         }
 
         public void RejectInput()
         {
             // Game rejected player input, play an animation to indicate this.
+            StartCoroutine(AnimateRejection());
         }
 
-        private void RenderPlayerSymbol(GameObject prefab)
+        public void Light()
         {
-            if (_activePlayerSymbol)
-                Destroy(_activePlayerSymbol);
-            _activePlayerSymbol = Instantiate(prefab, transform);
+            digitSegmentRenderer.SetLitMaterial(aiColor);
+            digitSegmentRenderer.LightAll();
+        }
+
+        private IEnumerator AnimateRejection()
+        {
+            yield return null;
+            digitSegmentRenderer.DarkenAll();
+            yield return new WaitForSeconds(0.2f);
+            if(_setPlayer.HasValue)
+                SetPlayer(_setPlayer.Value);
         }
 
         private void HandlePress()
         {
+            digitSegmentRenderer.LightAll();
             _interactionCallback?.Invoke(_columnAddress, _rowAddress, this);
         }
     }

@@ -11,6 +11,7 @@ namespace Game
     public class GameControl : MonoBehaviour
     {
         [SerializeField] private AppControl appControl;
+        [SerializeField] private GameUi gameUi;
 
         private GameState _gameState;
 
@@ -34,23 +35,38 @@ namespace Game
 
         private void HandleAppStateChange(AppStates prev, AppStates next)
         {
-            if (next == AppStates.Game)
+            switch (next)
             {
-                StartCoroutine(SequenceRoutine());
+                case AppStates.Game:
+                    StartCoroutine(SequenceRoutine());
+                    break;
+                case AppStates.GameResults when _gameState.Winner.HasValue:
+                    gameUi.gameObject.SetActive(true);
+                    gameUi.AnnounceWinner(_gameState.Winner.Value.symbol);
+                    break;
+                case AppStates.GameResults:
+                    gameUi.gameObject.SetActive(true);
+                    gameUi.AnnounceDraw();
+                    break;
+                default:
+                    gameUi.gameObject.SetActive(false);
+                    break;
             }
         }
 
         private IEnumerator SequenceRoutine()
         {
-            Debug.Log("Game sequence begun");
+            gameUi.gameObject.SetActive(true);
+            yield return null;
+            gameUi.Clear();
             _gameState = new GameState(GameSetup.Board, GameSetup.Players);
             _gameState.CurrentMap.OnTileUpdate += OnTileUpdate;
-            while (!MoveCheck.CheckEndGame(_gameState))
+            while (!MoveCheck.CheckEndGame(ref _gameState))
             {
                 GameTurnLoop.UpdateTurnState(ref _gameState);
+                gameUi.AnnouncePlayer(_gameState.CurrentPlayer);
                 yield return null;
             }
-            Debug.Log("Game sequence completed");
             // Run the game, await a winner
             yield return null;
             RoutineComplete();
@@ -58,6 +74,7 @@ namespace Game
 
         private void RoutineComplete()
         {
+            gameUi.Clear();
             appControl.CurrentAppState = AppStates.CelebrateWinner;
         }
     }

@@ -15,7 +15,6 @@ namespace Game.Systems
             state.CurrentMap.Set(moveSelection.Position.X, moveSelection.Position.Y, (int)state.CurrentPlayer);
             
             state.TurnState = GameTurnState.CheckMove;
-            Debug.Log($"AI Picked a move: {move}");
         }
 
     }

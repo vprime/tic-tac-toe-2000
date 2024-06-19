@@ -11,6 +11,8 @@ namespace App.Systems
     public class AssetLoader : MonoBehaviour
     {
         [SerializeField] private AppControl appControl;
+        [SerializeField] private float sequenceTime = 3f;
+        [SerializeField] private GameObject sequenceRenderRoot;
         private void Awake()
         {
             appControl.OnAppStateChange.AddListener(HandleAppStateChange);
@@ -26,7 +28,10 @@ namespace App.Systems
 
         private IEnumerator LoadAssets()
         {
-            yield return null;
+            sequenceRenderRoot.SetActive(true);
+            // Trigger opening sequence animation, and await completion or user input.
+            yield return new WaitForSeconds(sequenceTime);
+            sequenceRenderRoot.SetActive(false);
             LoadingComplete();
         }
 

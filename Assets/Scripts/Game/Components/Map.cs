@@ -3,18 +3,43 @@ using System.Collections.Generic;
 
 namespace Game.Components
 {
+    /// <summary>
+    /// Game board map container
+    /// </summary>
     public class Map : List<List<int>>
     {
+        /// <summary>
+        /// Rows in the game map. Aka "Y".
+        /// </summary>
         public int Rows { get; }
 
+        /// <summary>
+        /// Columns in the game map. Aka "X"
+        /// </summary>
         public int Columns { get; }
 
+        /// <summary>
+        /// Value used when tile is empty or unset.
+        /// </summary>
         public int DefaultData { get; }
 
+        /// <summary>
+        /// Rows * Columns
+        /// </summary>
         public int Area => Rows * Columns;
+        
+        /// <summary>
+        /// Event triggered when a map tile is updated
+        /// </summary>
         public event Action<MapTile> OnTileUpdate;
 
-        public Map(int rows, int columns, int defaultData)
+        /// <summary>
+        /// Construct a game map container.
+        /// </summary>
+        /// <param name="rows">How tall is the game board? Y value</param>
+        /// <param name="columns">How wide is the game board? X value</param>
+        /// <param name="defaultData">What is the data for empty cells? (Default: -1)</param>
+        public Map(int rows, int columns, int defaultData = -1)
         {
             Rows = rows;
             Columns = columns;
@@ -33,6 +58,12 @@ namespace Game.Components
             }
         }
 
+        /// <summary>
+        /// Check if input is within bounds and the location is empty.
+        /// </summary>
+        /// <param name="x">Column position</param>
+        /// <param name="y">Row position</param>
+        /// <returns>True if the position is valid.</returns>
         public bool ValidateMove(int x, int y)
         {
             // Bounds Check
@@ -42,12 +73,15 @@ namespace Game.Components
                 return false;
 
             // Empty check
-            if (this[x][y] == DefaultData)
-                return true;
-            return false;
+            return this[x][y] == DefaultData;
         }
         
-
+        /// <summary>
+        /// Sets a tile in the game board. Triggers <see cref="OnTileUpdate"/>
+        /// </summary>
+        /// <param name="x">Column position</param>
+        /// <param name="y">Row position</param>
+        /// <param name="value">Updated value</param>
         public void Set(int x, int y, int value)
         {
             this[x][y] = value;
@@ -55,10 +89,10 @@ namespace Game.Components
         }
         
         /// <summary>
-        /// Traverse a row
+        /// List a row of tiles.
         /// </summary>
-        /// <param name="index">Row in Map</param>
-        /// <returns>Map contents for given row</returns>
+        /// <param name="index">Position of requested row</param>
+        /// <returns>A <see cref="List{T}"/> of <see cref="MapTile"/> contents for given row</returns>
         public List<MapTile> Row(int index)
         {
             var response = new List<MapTile>();
@@ -70,10 +104,10 @@ namespace Game.Components
         }
 
         /// <summary>
-        /// Traverse a column
+        /// List a column of tiles.
         /// </summary>
-        /// <param name="index">Column in map</param>
-        /// <returns>Map contents for given column</returns>
+        /// <param name="index">Positoin of requested column</param>
+        /// <returns>A <see cref="List{T}"/> of <see cref="MapTile"/> contents for given column</returns>
         public List<MapTile> Column(int index)
         {
             var response = new List<MapTile>();
@@ -85,10 +119,10 @@ namespace Game.Components
         }
 
         /// <summary>
-        /// Traverse a diagnal.
+        /// Lists a diagonal of tiles.
         /// </summary>
         /// <param name="direction">Movement along row per column. 1 = top lef to bottom right -1 = top right to bottom left</param>
-        /// <returns>Map contents for the given direction</returns>
+        /// <returns>A <see cref="List{T}"/> of <see cref="MapTile"/> contents for given direction</returns>
         public List<MapTile> Diagonal(int direction)
         {
             var response = new List<MapTile>();
@@ -106,7 +140,7 @@ namespace Game.Components
         /// <summary>
         /// Provides a list of open positions
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A <see cref="List{T}"/> of <see cref="MapTile"/> that are currently <see cref="DefaultData"/>.</returns>
         public List<MapTile> OpenPositions()
         {
             var response = new List<MapTile>();
