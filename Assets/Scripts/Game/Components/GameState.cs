@@ -8,7 +8,7 @@ namespace Game.Components
         public readonly Dictionary<PlayerSymbol, Player> Players;
         public int Round = 0;
         public PlayerSymbol CurrentPlayer = PlayerSymbol.X;
-        public List<Move> Moves = new();
+        public readonly List<Move> Moves = new();
         public GameTurnState TurnState = GameTurnState.Init;
         public bool GameOver = false;
         public Player? Winner;
@@ -16,7 +16,7 @@ namespace Game.Components
 
         public GameState(Board board, Dictionary<PlayerSymbol, Player> players)
         {
-            CurrentMap = new Map(board.rows, board.columns, -1);
+            CurrentMap = new Map(board.rows, board.columns);
             Players = players;
         }
     }

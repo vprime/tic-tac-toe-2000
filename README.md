@@ -6,8 +6,9 @@ This was authored within the period of 2024-06-12 to 2024-06-19 by [Vi Prime](ht
 All code, graphic assets, and sounds are created by Vi Prime unless otherwise noted.
 
 ## 3rd party assets
-- Standard default files and structure provided by the Unity game engine.
-- Fonts, Input Settings, Code, and other assets loaded from Unity Package Manager.
+- Standard default files and structure provided by the Unity game engine, licenced by Unity
+- Fonts, Input Settings, Code, and other assets loaded from Unity Package Manager, licenced by Unity Technologies.
+- [Segment14 Font](Assets%2FFonts%2Fhdad-segment14) by [Paul Flo Williams](http://hisdeedsaredust.com/) sourced from [FontLibrary](https://fontlibrary.org/en/font/segment14) provided under the [SIL Open Font License](https://openfontlicense.org/)
 
 ## Legal
 [Tic Tac Toe 2000](https://github.com/vprime/tic-tac-toe-2000) © 2024 by [Vi Prime](https://vprime.dev/) is licensed under [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International licence](LICENSE)
@@ -70,7 +71,6 @@ Notable locations within the project files
     - GameData
       - Scriptable Objects containing gameplay configurations
       - Lighting configuration asset
-      - Post processing asset
   - Sounds
     - Sounds and music assets
   - UI Toolkit
