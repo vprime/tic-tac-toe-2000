@@ -26,7 +26,6 @@ namespace App.Systems
         // Start is called before the first frame update
         private void OnEnable()
         {
-            Debug.Log("AppUI Enabled");
             _menuRoot = uiDocument.rootVisualElement.Q("root");
             _players = uiDocument.rootVisualElement.Q("PlayerModeSelect");
             _playerSymbol = uiDocument.rootVisualElement.Q("SinglePlayerSymbolSelect");
@@ -63,7 +62,6 @@ namespace App.Systems
 
         private void HandleSinglePlayerMode(ClickEvent evt)
         {
-            Debug.Log("Single player mode selected");
             _players.style.display = DisplayStyle.None;
             _playerSymbol.style.display = DisplayStyle.Flex;
         }

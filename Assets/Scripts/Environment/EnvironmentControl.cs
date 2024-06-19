@@ -16,6 +16,12 @@ namespace Environment
         [SerializeField] private AppControl appControl;
         [SerializeField] private GameControl gameControl;
         [SerializeField] private EnvironmentObjects environmentObjects;
+        [SerializeField] private AudioSource gameMusicSource;
+        [SerializeField] private AudioClip startGameMusic;
+        [SerializeField] private AudioClip successMusic;
+        [SerializeField] private AudioClip lossMusic;
+        [SerializeField] private AudioClip drawMusic;
+        
 
         private readonly List<GameObject> _spawnedAssets = new();
         private readonly List<List<GamePiece>> _boardPieces = new();
@@ -45,9 +51,9 @@ namespace Environment
                 case AppStates.Game:
                     break;
                 case AppStates.CelebrateWinner:
+                    StartCoroutine(SequenceWinnerRoutine());
                     break;
                 case AppStates.GameResults:
-                    CleanUpGameEnvironment();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(next), next, null);
@@ -61,9 +67,80 @@ namespace Environment
             var gameSetup = gameControl.GameSetup;
             LayoutGameTiles(gameSetup.Board);
             gameControl.OnTileUpdate += UpdateTileDisplay;
-            
-            yield return null;
+            gameMusicSource.PlayOneShot(startGameMusic);
+            yield return AnimateSetBoard();
             CountdownRoutineComplete();
+        }
+
+        private IEnumerator SequenceWinnerRoutine()
+        {
+            yield return AnimateClearingBoard();
+            // Display the game's result.
+            if (gameControl.GameState.Winner is not null)
+            {
+                if (gameControl.GameState.Winner.Value.type is PlayerType.Human)
+                    gameMusicSource.PlayOneShot(successMusic);
+                else
+                    gameMusicSource.PlayOneShot(lossMusic);
+                // There was a winner
+                yield return DisplayWinningRow();
+            }
+            else
+            {
+                gameMusicSource.PlayOneShot(drawMusic);
+                
+            }
+            yield return null;
+            appControl.CurrentAppState = AppStates.GameResults;
+        }
+
+        private IEnumerator AnimateSetBoard()
+        {
+            for (var iCol = 0; iCol < _boardPieces.Count; iCol++)
+            {
+                var columnList = _boardPieces[iCol];
+                for (var iRow = 0; iRow < columnList.Count; iRow++)
+                {
+                    columnList[iRow]?.Light();
+                }
+            }
+            yield return new WaitForSeconds(0.2f);
+            for (var iCol = 0; iCol < _boardPieces.Count; iCol++)
+            {
+                var columnList = _boardPieces[iCol];
+                for (var iRow = 0; iRow < columnList.Count; iRow++)
+                {
+                    columnList[iRow]?.ClearPlayer();
+                }
+            }
+            yield return new WaitForSeconds(0.2f);
+        }
+
+        private IEnumerator AnimateClearingBoard()
+        {
+            for (var iCol = 0; iCol < _boardPieces.Count; iCol++)
+            {
+                var columnList = _boardPieces[iCol];
+                for (var iRow = 0; iRow < columnList.Count; iRow++)
+                {
+                    columnList[iRow]?.Light();
+                    yield return new WaitForSeconds(0.1f);
+                    columnList[iRow]?.ClearPlayer();
+                    yield return new WaitForSeconds(0.1f);
+                }
+            }
+        }
+
+        private IEnumerator DisplayWinningRow()
+        {
+            foreach (var tile in gameControl.GameState.WinningTiles)
+            {
+                if (gameControl.GameState.Winner.HasValue)
+                {
+                    _boardPieces[tile.Position.X][tile.Position.Y]?.SetPlayer(gameControl.GameState.Winner.Value);
+                    yield return  new WaitForSeconds(0.5f);
+                }
+            }
         }
 
         private void UpdateTileDisplay(MapTile tile)
@@ -79,8 +156,6 @@ namespace Environment
 
         private void LayoutGameTiles(Board gameBoard)
         {
-            var boardRoot = Instantiate(new GameObject("GameBoard"));
-            _spawnedAssets.Add(boardRoot);
             for (var iCol = 0; iCol < gameBoard.columns; iCol++)
             {
                 var columnPosition = iCol * environmentObjects.columnHeight;
@@ -88,27 +163,40 @@ namespace Environment
                 for (var iRow = 0; iRow < gameBoard.rows; iRow++)
                 {
                     var rowPosition = iRow * environmentObjects.rowWidth;
-                    var gamePiece = Instantiate(environmentObjects.gamePiece, boardRoot.transform);
+                    var gamePiece = Instantiate(environmentObjects.gamePiece);
                     gamePiece.Setup(iCol, iRow, HandlePieceInteraction);
                     gamePiece.transform.position = new Vector3(rowPosition, columnPosition, 0f);
                     piecesCol.Add(gamePiece);
+                    _spawnedAssets.Add(gamePiece.gameObject);
                 }
                 _boardPieces.Add(piecesCol);
             }
-            boardRoot.transform.position = Vector3.forward * environmentObjects.boardZOffset;
         }
 
         private void HandlePieceInteraction(int col, int row, GamePiece piece)
         {
-            if (gameControl.PlayerInput(col, row, out var currentPlayer))
+            switch (appControl.CurrentAppState)
             {
-                piece.SetPlayer(currentPlayer);
-            }
-            else
-            {
-                piece.RejectInput();
+                case AppStates.Game when gameControl.PlayerInput(col, row, out var currentPlayer):
+                    piece.SetPlayer(currentPlayer);
+                    break;
+                case AppStates.GameResults:
+                    piece.RejectInput();
+                    StartCoroutine(EndGameRoutine());
+                    break;
+                default:
+                    piece.RejectInput();
+                    break;
             }
         }
+
+        private IEnumerator EndGameRoutine()
+        {
+            yield return AnimateSetBoard();
+            
+            appControl.CurrentAppState = AppStates.MainMenu;
+        }
+        
 
         private void CountdownRoutineComplete()
         {

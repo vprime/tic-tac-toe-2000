@@ -12,8 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f13eeab9219ed928b86df13571036e54, type: 3}
   m_Name: DEFAULT - Button
   m_EditorClassIdentifier: 
-  MaxPressDepth: 0.1
-  ButtonWidth: 1
-  ButtonHeight: 1
-  ButtonSnapTime: 0.5
-  ButtonCooldownTime: 1
+  maxPressDepth: 0.005
+  buttonSnapTime: 0.3
+  buttonCooldownTime: 0.5

@@ -1,1 +1,6 @@
 @import url("unity-theme://default");
+
+
+Button {
+    font-size: 40px;
+}

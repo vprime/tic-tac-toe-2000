@@ -3,6 +3,7 @@ using System.Collections;
 using Environment.Components;
 using Environment.Interfaces;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Environment.Systems
 {
@@ -12,16 +13,19 @@ namespace Environment.Systems
         
         [SerializeField] private Transform buttonIndicator;
         [SerializeField] private ButtonConfig buttonConfig;
+        [SerializeField] private Vector3 pressAxis;
+        [SerializeField] private AudioSource audioSource;
         
         // Button Control
         private bool _buttonActivated;
         private float _buttonPressTime;
         private float _buttonEnableTime;
 
-        private Vector2 _buttonCenter;
-        private float _buttonXRadius;
-        private float _buttonYRadius;
-        
+        private void Start()
+        {
+            audioSource.pitch = Random.Range(0.9f, 1.1f);
+        }
+
         public void Trigger()
         {
             if (_buttonActivated) return;
@@ -34,18 +38,18 @@ namespace Environment.Systems
         {
             _buttonPressTime = Time.time + buttonConfig.buttonSnapTime;
             _buttonEnableTime = Time.time + buttonConfig.buttonCooldownTime;
-                
             OnPress?.Invoke();
+            audioSource.Play();
             while (_buttonPressTime > Time.time || _buttonEnableTime > Time.time)
             {
                 if (_buttonPressTime >= Time.time)
                 {
-                    var depth = (_buttonPressTime - Time.time)/buttonConfig.buttonSnapTime * buttonConfig.maxPressDepth;
-                    buttonIndicator.localPosition = new Vector3(buttonIndicator.localPosition.x, -depth, buttonIndicator.localPosition.z);
+                    var depth = (_buttonPressTime - Time.time)/buttonConfig.buttonSnapTime;
+                    buttonIndicator.localPosition =
+                        Vector3.Lerp(pressAxis * buttonConfig.maxPressDepth, Vector3.zero, 1f - depth);
                 }
                 yield return null;
             }
-            buttonIndicator.localPosition = new Vector3(buttonIndicator.localPosition.x, 0f, buttonIndicator.localPosition.z);
             _buttonActivated = false;
         }
     }

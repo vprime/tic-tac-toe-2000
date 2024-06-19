@@ -1,22 +1,22 @@
 using System.Collections.Generic;
 using Game.Components;
-using UnityEngine;
 
 namespace Game.Systems
 {
     public static class MoveCheck
     {
-        public static bool CheckEndGame(GameState state)
+        public static bool CheckEndGame(ref GameState state)
         {
-            if (CheckWin(state.CurrentMap, out var winner, out _))
+            if (CheckWin(state.CurrentMap, out var winner, out var row))
             {
-                Debug.Log($"Winner is player {(PlayerSymbol)winner}!");
+                var winningPlayer = state.Players[(PlayerSymbol)winner];
+                state.Winner = winningPlayer;
+                state.WinningTiles = row;
+                state.GameOver = true;
                 return true;
             }
-
             if (!CheckGameover(state.CurrentMap, state.Round)) return false;
-            // Game over!
-            Debug.Log("It was a draw!");
+            state.GameOver = true;
             return true;
 
         }
@@ -26,7 +26,7 @@ namespace Game.Systems
             return map.Area <= round;
         }
 
-        public static bool CheckWin(Map map, out int winningPlayer, out List<MapTile> winningTiles)
+        private static bool CheckWin(Map map, out int winningPlayer, out List<MapTile> winningTiles)
         {
             var pathsToTest = new List<List<MapTile>>();
             
