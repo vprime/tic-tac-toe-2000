@@ -1,0 +1,14 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="root" style="flex-grow: 1; align-items: center; justify-content: center; align-self: center;">
+        <ui:VisualElement name="PlayerModeSelect" style="flex-grow: 1; justify-content: center; align-self: center; visibility: visible; display: flex;">
+            <ui:Label tabindex="-1" text="Players" parse-escape-sequences="true" display-tooltip-when-elided="true" />
+            <ui:Button text="Single Player" parse-escape-sequences="true" display-tooltip-when-elided="true" name="SinglePlayerButton" />
+            <ui:Button text="Two Players" parse-escape-sequences="true" display-tooltip-when-elided="true" name="TwoPlayerButton" />
+        </ui:VisualElement>
+        <ui:VisualElement name="SinglePlayerSymbolSelect" style="flex-grow: 1; justify-content: center; align-self: center; display: flex; visibility: visible;">
+            <ui:Label tabindex="-1" text="Pick your Symbol" parse-escape-sequences="true" display-tooltip-when-elided="true" style="white-space: nowrap; -unity-text-align: upper-center; height: 25px; align-self: auto;" />
+            <ui:Button text="X" parse-escape-sequences="true" display-tooltip-when-elided="true" name="PlayX" />
+            <ui:Button text="O" parse-escape-sequences="true" display-tooltip-when-elided="true" name="PlayO" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
