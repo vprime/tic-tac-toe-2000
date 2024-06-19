@@ -8,28 +8,34 @@ namespace Environment.Systems
     public class InteractionBehavior : MonoBehaviour
     {
         [SerializeField] private Camera raycastCamera;
-        [SerializeField] private InputActionReference click;
         [SerializeField] private LayerMask interactableLayers;
         
 
         private void Start()
         {
+            Debug.Log($"Interaction Behavior initialized");
             if (!raycastCamera)
                 raycastCamera = Camera.main;
             if (!raycastCamera)
                 throw new Exception("No raycast Camera assigned in the InteractionBehavior!");
-
-            if (!click)
-                throw new Exception("No InputActionRefrence assigned for InteractionBehavior!");
-            
-            click.action.performed += HandlePress;
         }
 
+        private void Update()
+        {
+            if (Pointer.current.press.wasReleasedThisFrame)
+            {
+                HandlePress();
+            }
+        }
 
-        private void HandlePress(InputAction.CallbackContext ctx)
+        void HandlePress()
         {
             var value = Vector2.zero;
-            if (Touchscreen.current is not null)
+            if (Pointer.current is not null)
+            {
+                value = Pointer.current.position.ReadValue();
+            }
+            else if (Touchscreen.current is not null)
             {
                 value = Touchscreen.current.primaryTouch.position.ReadValue();
             }
@@ -37,7 +43,10 @@ namespace Environment.Systems
             {
                 value = Mouse.current.position.ReadValue();
             }
-
+            else
+            {
+                Debug.LogError("No pointer position source");
+            }
             var ray = raycastCamera.ScreenPointToRay(value);
             if (Physics.Raycast(ray, out var hit, float.PositiveInfinity, interactableLayers))
                 ProcessInteraction(hit);
