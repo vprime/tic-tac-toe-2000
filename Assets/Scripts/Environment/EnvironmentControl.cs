@@ -78,10 +78,9 @@ namespace Environment
             // Display the game's result.
             if (gameControl.GameState.Winner is not null)
             {
-                if (gameControl.GameState.Winner.Value.type is PlayerType.Human)
-                    gameMusicSource.PlayOneShot(successMusic);
-                else
-                    gameMusicSource.PlayOneShot(lossMusic);
+                gameMusicSource.PlayOneShot(gameControl.GameState.Winner.Value.type is PlayerType.Human
+                    ? successMusic
+                    : lossMusic);
                 // There was a winner
                 yield return DisplayWinningRow();
             }
@@ -96,50 +95,36 @@ namespace Environment
 
         private IEnumerator AnimateSetBoard()
         {
-            for (var iCol = 0; iCol < _boardPieces.Count; iCol++)
+            foreach (var tile in _boardPieces.SelectMany(columnList => columnList))
             {
-                var columnList = _boardPieces[iCol];
-                for (var iRow = 0; iRow < columnList.Count; iRow++)
-                {
-                    columnList[iRow]?.Light();
-                }
+                tile?.Light();
             }
             yield return new WaitForSeconds(0.2f);
-            for (var iCol = 0; iCol < _boardPieces.Count; iCol++)
+            foreach (var tile in _boardPieces.SelectMany(columnList => columnList))
             {
-                var columnList = _boardPieces[iCol];
-                for (var iRow = 0; iRow < columnList.Count; iRow++)
-                {
-                    columnList[iRow]?.ClearPlayer();
-                }
+                tile?.ClearPlayer();
             }
             yield return new WaitForSeconds(0.2f);
         }
 
         private IEnumerator AnimateClearingBoard()
         {
-            for (var iCol = 0; iCol < _boardPieces.Count; iCol++)
+            foreach (var tile in _boardPieces.SelectMany(columnList => columnList))
             {
-                var columnList = _boardPieces[iCol];
-                for (var iRow = 0; iRow < columnList.Count; iRow++)
-                {
-                    columnList[iRow]?.Light();
-                    yield return new WaitForSeconds(0.1f);
-                    columnList[iRow]?.ClearPlayer();
-                    yield return new WaitForSeconds(0.1f);
-                }
+                tile?.Light();
+                yield return new WaitForSeconds(0.1f);
+                tile?.ClearPlayer();
+                yield return new WaitForSeconds(0.1f);
             }
         }
 
         private IEnumerator DisplayWinningRow()
         {
+            if (!gameControl.GameState.Winner.HasValue) yield break;
             foreach (var tile in gameControl.GameState.WinningTiles)
             {
-                if (gameControl.GameState.Winner.HasValue)
-                {
-                    _boardPieces[tile.Position.X][tile.Position.Y]?.SetPlayer(gameControl.GameState.Winner.Value);
-                    yield return  new WaitForSeconds(0.5f);
-                }
+                _boardPieces[tile.Position.X][tile.Position.Y]?.SetPlayer(gameControl.GameState.Winner.Value);
+                yield return  new WaitForSeconds(0.5f);
             }
         }
 

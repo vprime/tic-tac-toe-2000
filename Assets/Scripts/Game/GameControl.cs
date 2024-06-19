@@ -56,7 +56,6 @@ namespace Game
 
         private IEnumerator SequenceRoutine()
         {
-            Debug.Log("Game sequence begun");
             gameUi.gameObject.SetActive(true);
             yield return null;
             gameUi.Clear();

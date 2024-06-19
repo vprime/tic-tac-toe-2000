@@ -7,11 +7,11 @@
         <ui:VisualElement name="AnnounceWinner" style="flex-grow: 1; display: none;">
             <ui:Label tabindex="-1" text="X" parse-escape-sequences="true" display-tooltip-when-elided="true" name="WinnerName" style="-unity-text-align: upper-center; font-size: 40px; -unity-font-style: bold; color: rgb(255, 255, 255);" />
             <ui:Label tabindex="-1" text="Won" parse-escape-sequences="true" display-tooltip-when-elided="true" style="-unity-text-align: upper-center; font-size: 40px; color: rgb(255, 255, 255);" />
-            <ui:Label tabindex="-1" text="Click a button to end the game" parse-escape-sequences="true" display-tooltip-when-elided="true" style="-unity-text-align: upper-center; color: rgb(255, 255, 255); font-size: 20px; margin-top: auto;" />
+            <ui:Label tabindex="-1" text="Click any tile to end the game" parse-escape-sequences="true" display-tooltip-when-elided="true" style="-unity-text-align: upper-center; color: rgb(255, 255, 255); font-size: 20px; margin-top: auto;" />
         </ui:VisualElement>
         <ui:VisualElement name="AnnounceDraw" style="flex-grow: 1; display: none;">
             <ui:Label tabindex="-1" text="Draw!" parse-escape-sequences="true" display-tooltip-when-elided="true" style="-unity-text-align: upper-center; font-size: 40px; color: rgb(255, 255, 255);" />
-            <ui:Label tabindex="-1" text="Click a button to end the game" parse-escape-sequences="true" display-tooltip-when-elided="true" style="-unity-text-align: upper-center; color: rgb(255, 255, 255); font-size: 20px; margin-top: auto;" />
+            <ui:Label tabindex="-1" text="Click any tile to end the game" parse-escape-sequences="true" display-tooltip-when-elided="true" style="-unity-text-align: upper-center; color: rgb(255, 255, 255); font-size: 20px; margin-top: auto;" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

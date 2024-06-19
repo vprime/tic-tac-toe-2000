@@ -1,5 +1,3 @@
-using UnityEngine;
-
 namespace Environment.Components
 {
     public enum DigitSegments

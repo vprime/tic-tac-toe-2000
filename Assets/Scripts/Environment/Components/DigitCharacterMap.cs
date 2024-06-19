@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace Environment.Components
 {
@@ -7,9 +6,9 @@ namespace Environment.Components
     {
         public static readonly Dictionary<char, List<DigitSegments>> Map = new()
         {
-            {'A', new() { DigitSegments.TopLeftVert, DigitSegments.TopLeftHoriz, DigitSegments.TopRightHoriz, DigitSegments.TopRightHoriz, DigitSegments.CenterLeftHoriz, DigitSegments.CenterRightHoriz,DigitSegments.BottomLeftVert, DigitSegments.BottomRightHoriz}},
-            {'O', new() { DigitSegments.TopLeftVert, DigitSegments.TopLeftHoriz, DigitSegments.TopRightHoriz, DigitSegments.TopRightVert, DigitSegments.BottomLeftVert, DigitSegments.BottomLeftHoriz, DigitSegments.BottomRightHoriz, DigitSegments.BottomRightVert}},
-            {'X', new() { DigitSegments.TopLeftDiag, DigitSegments.TopRightDiag,DigitSegments.BottomLeftDiag, DigitSegments.BottomRightDiag}},
+            {'A', new List<DigitSegments> { DigitSegments.TopLeftVert, DigitSegments.TopLeftHoriz, DigitSegments.TopRightHoriz, DigitSegments.TopRightHoriz, DigitSegments.CenterLeftHoriz, DigitSegments.CenterRightHoriz,DigitSegments.BottomLeftVert, DigitSegments.BottomRightHoriz}},
+            {'O', new List<DigitSegments> { DigitSegments.TopLeftVert, DigitSegments.TopLeftHoriz, DigitSegments.TopRightHoriz, DigitSegments.TopRightVert, DigitSegments.BottomLeftVert, DigitSegments.BottomLeftHoriz, DigitSegments.BottomRightHoriz, DigitSegments.BottomRightVert}},
+            {'X', new List<DigitSegments> { DigitSegments.TopLeftDiag, DigitSegments.TopRightDiag,DigitSegments.BottomLeftDiag, DigitSegments.BottomRightDiag}}
         };
     }
 }

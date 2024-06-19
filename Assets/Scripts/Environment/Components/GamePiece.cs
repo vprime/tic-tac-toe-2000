@@ -7,6 +7,9 @@ using UnityEngine;
 
 namespace Environment.Components
 {
+    /// <summary>
+    /// Game Object behavior component for game pieces
+    /// </summary>
     public class GamePiece : MonoBehaviour
     {
         [SerializeField] private ClickableObject clickableObject;
@@ -95,7 +98,7 @@ namespace Environment.Components
             digitSegmentRenderer.LightAll();
         }
 
-        IEnumerator AnimateRejection()
+        private IEnumerator AnimateRejection()
         {
             yield return null;
             digitSegmentRenderer.DarkenAll();
