@@ -45,7 +45,7 @@ namespace Game.Systems
             _announceWinner.style.display = DisplayStyle.None;
             _announceDraw.style.display = DisplayStyle.None;
             
-            _playerName.text = $"{player}";
+            _playerName.text = $"{player}'s Turn";
             _announcePlayer.style.display = DisplayStyle.Flex;
         }
 
@@ -54,7 +54,7 @@ namespace Game.Systems
             _announcePlayer.style.display = DisplayStyle.None;
             _announceDraw.style.display = DisplayStyle.None;
             
-            _winnerName.text = $"{player}";
+            _winnerName.text = $"{player} Won";
             _announceWinner.style.display = DisplayStyle.Flex;
         }
 

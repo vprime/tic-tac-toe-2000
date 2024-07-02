@@ -268,7 +268,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   raycastCamera: {fileID: 1488502027}
-  click: {fileID: 3001919216989983466, guid: 3fee424023bbdb78582bc11cfda5dffe, type: 3}
   interactableLayers:
     serializedVersion: 2
     m_Bits: 64
@@ -979,6 +978,7 @@ GameObject:
   - component: {fileID: 1488502027}
   - component: {fileID: 1488502026}
   - component: {fileID: 1488502029}
+  - component: {fileID: 1488502030}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1104,6 +1104,21 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
+--- !u!114 &1488502030
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1488502025}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2240096fd59379940862b5dba153531f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameCamera: {fileID: 1488502027}
+  landscapeScaling: 0.01
+  portraitScaling: 0.075
 --- !u!1 &1570333227
 GameObject:
   m_ObjectHideFlags: 0
